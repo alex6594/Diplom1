@@ -4,6 +4,7 @@ import requests
 import os
 import time
 from tqdm import tqdm
+
 with open('token.txt', 'r') as file_token:
     token = file_token.read().strip()
 with open('version.txt', 'r') as version_file:
@@ -22,6 +23,7 @@ class VK:
     # noinspection PyGlobalUndefined
     def photos(self):
         global j_file
+        global photo_inf
         command_url = self.url + "photos.get"
         command_url_params = {
             'album_id': 'profile',
@@ -96,29 +98,26 @@ class YandexCLoud:
         return ''
 
 
+photos_list = []
 vk_client = VK(token, version)
 pprint(vk_client.photos())
 vk_client.file_download()
+photo_nums = photo_inf
+for num_photo in range(len(photo_nums)):
+    photos_list.append(photo_nums[num_photo]['file_name'])
 
 if __name__ == '__main__':
     file_nums = int(input('Введите количество загружаемых файлов: '))
     token = input("Введите токен яндекса: ")
     uploader = YandexCLoud(token)
-    path_to_file = input("Введите путь к файлу: ")
-    file_way = path_to_file
     yd_path_to_file = input("Введите название директории на яндекс диске: ")
     yd_path = yd_path_to_file
-    files_list = []
     timing = []
     for timelaps in range(file_nums):
         timing.append(timelaps)
-    for file in range(file_nums):
-        file_name = input("Введите имя файла с расширением: ")
-        files_list.append(file_name)
-    for timer, file_now in zip(tqdm(timing), files_list):
-        path_to_file = os.path.abspath(os.path.join(path_to_file, file_now))
+    for timer, file_now in zip(tqdm(timing), photos_list):
+        path_to_file = os.path.abspath(os.path.join(file_now))
         yd_path_to_file = yd_path_to_file + "/" + file_now
-        print(uploader.upload(path_to_file, yd_path_to_file))
+        print(uploader.upload(path_to_file,yd_path_to_file))
         time.sleep(3)
-        path_to_file = file_way
         yd_path_to_file = yd_path
