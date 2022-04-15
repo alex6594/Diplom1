@@ -118,6 +118,6 @@ if __name__ == '__main__':
     for timer, file_now in zip(tqdm(timing), photos_list):
         path_to_file = os.path.abspath(os.path.join(file_now))
         yd_path_to_file = yd_path_to_file + "/" + file_now
-        print(uploader.upload(path_to_file,yd_path_to_file))
+        print(uploader.upload(path_to_file, yd_path_to_file))
         time.sleep(3)
         yd_path_to_file = yd_path
